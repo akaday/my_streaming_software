@@ -1,12 +1,11 @@
-#include "screen_recorder.h"
+#include "audio_recorder.h"
 #include "ffmpeg_wrapper.h"
-#include "real_time_effects.h"
 #include <iostream>
 
 namespace my_streaming_software {
 namespace recorder {
 
-void ScreenRecorder::startRecording(const std::string& filePath) {
+void AudioRecorder::startRecording(const std::string& filePath) {
     if (isRecording) {
         std::cerr << "Recording is already in progress." << std::endl;
         return;
@@ -31,7 +30,7 @@ void ScreenRecorder::startRecording(const std::string& filePath) {
     std::cout << "Recording started." << std::endl;
 }
 
-void ScreenRecorder::stopRecording() {
+void AudioRecorder::stopRecording() {
     if (!isRecording) {
         std::cerr << "No recording is in progress." << std::endl;
         return;
@@ -47,7 +46,7 @@ void ScreenRecorder::stopRecording() {
     std::cout << "Recording stopped." << std::endl;
 }
 
-void ScreenRecorder::saveRecording() {
+void AudioRecorder::saveRecording() {
     if (isRecording) {
         std::cerr << "Cannot save while recording is in progress." << std::endl;
         return;
@@ -60,21 +59,6 @@ void ScreenRecorder::saveRecording() {
     }
 
     std::cout << "Recording saved to " << filePath << std::endl;
-}
-
-void ScreenRecorder::applyRealTimeEffect(const std::string& effectName) {
-    if (!isRecording) {
-        std::cerr << "Cannot apply effects while recording is not in progress." << std::endl;
-        return;
-    }
-
-    // Apply real-time effect using FFmpeg
-    if (!ffmpegWrapper.applyRealTimeEffect(effectName)) {
-        std::cerr << "Failed to apply real-time effect: " << effectName << std::endl;
-        return;
-    }
-
-    std::cout << "Real-time effect " << effectName << " applied." << std::endl;
 }
 
 } // namespace recorder
