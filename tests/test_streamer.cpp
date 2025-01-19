@@ -1,4 +1,6 @@
 #include "live_streamer.h"
+#include "rtmp_streamer.h"
+#include "webrtc_streamer.h"
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
@@ -12,40 +14,28 @@ public:
     MOCK_METHOD(bool, stop, (), (override));
 };
 
+class MockRTMPStreamer : public RTMPStreamer {
+public:
+    MOCK_METHOD(bool, initialize, (const std::string&), (override));
+    MOCK_METHOD(bool, sendData, (const char*, int), (override));
+};
+
+class MockWebRTCStreamer : public WebRTCStreamer {
+public:
+    MOCK_METHOD(bool, initialize, (const std::string&), (override));
+    MOCK_METHOD(bool, sendData, (const char*, int), (override));
+};
+
 class LiveStreamerTest : public Test {
 protected:
     LiveStreamer streamer;
     MockFFmpegWrapper mockFFmpegWrapper;
+    MockRTMPStreamer mockRTMPStreamer;
+    MockWebRTCStreamer mockWebRTCStreamer;
 
     void SetUp() override {
         streamer.ffmpegWrapper = &mockFFmpegWrapper;
     }
 };
 
-TEST_F(LiveStreamerTest, Initialize) {
-    EXPECT_CALL(mockFFmpegWrapper, initialize(_)).WillOnce(Return(true));
-
-    bool result = streamer.initialize("rtmp://your_streaming_server/live");
-
-    EXPECT_TRUE(result);
-}
-
-TEST_F(LiveStreamerTest, StartStreaming) {
-    EXPECT_CALL(mockFFmpegWrapper, start()).WillOnce(Return(true));
-
-    streamer.isStreaming = false;
-    bool result = streamer.startStreaming();
-
-    EXPECT_TRUE(result);
-    EXPECT_TRUE(streamer.isStreaming);
-}
-
-TEST_F(LiveStreamerTest, StopStreaming) {
-    EXPECT_CALL(mockFFmpegWrapper, stop()).WillOnce(Return(true));
-
-    streamer.isStreaming = true;
-    bool result = streamer.stopStreaming();
-
-    EXPECT_TRUE(result);
-    EXPECT_FALSE(streamer.isStreaming);
-}
+TEST

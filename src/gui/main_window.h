@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QComboBox>
+#include "ui_main_window.h"
 
 namespace my_streaming_software {
 namespace gui {
@@ -15,10 +16,14 @@ public:
 
 private slots:
     void applySelectedEffect();
+    void onStartButtonClicked();
+    void onStopButtonClicked();
 
 private:
     void setupUI();
     QComboBox *effectsComboBox;
+    Ui::MainWindow ui;
+    bool isStreaming = false;
 };
 
 } // namespace gui

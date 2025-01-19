@@ -1,16 +1,22 @@
 #include "main_window.h"
 #include "real_time_effects.h"
+#include <QApplication>
 #include <QComboBox>
+#include <QLabel>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLabel>
 
 namespace my_streaming_software {
 namespace gui {
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setupUI();
+
+    // Connect signals and slots
+    connect(ui.startButton, &QPushButton::clicked, this, &MainWindow::onStartButtonClicked);
+    connect(ui.stopButton, &QPushButton::clicked, this, &MainWindow::onStopButtonClicked);
 }
 
 void MainWindow::setupUI() {
@@ -45,5 +51,22 @@ void MainWindow::applySelectedEffect() {
     realTimeEffects.applyEffect(selectedEffect.toStdString(), "input.mp4", "output.mp4");
 }
 
-} // namespace gui
-} // namespace my_streaming_software
+void MainWindow::onStartButtonClicked() {
+    // Start recording or streaming
+    if (!isStreaming) {
+        // Start streaming logic
+        isStreaming = true;
+        ui.statusLabel->setText("Streaming started.");
+    } else {
+        QMessageBox::warning(this, "Warning", "Streaming is already in progress.");
+    }
+}
+
+void MainWindow::onStopButtonClicked() {
+    // Stop recording or streaming
+    if (isStreaming) {
+        // Stop streaming logic
+        isStreaming = false;
+        ui.statusLabel->setText("Streaming stopped.");
+    } else {
+        QMessage
